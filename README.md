@@ -5,15 +5,15 @@ transcriptions using dummy data.
 
 ------------------------------------------------------------------------
 
-1. Setup Instructions
+1. Setup Instructions (Node v 20)
 
 1.1 Clone the Repository
 
-    git clone <your-repo-url>
+    git clone https://github.com/satyam-sp/transcript.git
     cd backend-transcript
 
 1.2 Install Dependencies
-
+    
     npm install
 
 1.3 Configure Environment Variables
@@ -21,7 +21,7 @@ transcriptions using dummy data.
 Create a .env file:
 
     PORT=3000
-    MONGO_URI=mongodb://localhost:27017/transcripts
+    MONGO_URI=mongodb://localhost:27017/express_mongo_app
     DB_POOL_SIZE=10
 
 1.4 Run the Server
@@ -88,7 +88,7 @@ Response
 
 3.2 Create Transcript Azure
 
-POST /api/transcripts
+POST /api/azure-transcription
 Creates a new transcript using dummy transcription data.
 
 Request
