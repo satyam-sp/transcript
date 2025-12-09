@@ -1,161 +1,184 @@
 Transcript Service
-A simple Express + MongoDB service to store and fetch audio transcription (dummy data).
+
+A simple Express + MongoDB service to store and fetch audio
+transcriptions using dummy data.
+
+------------------------------------------------------------------------
 
 1. Setup Instructions
 
+1.1 Clone the Repository
 
-Clone the repository
+    git clone <your-repo-url>
+    cd backend-transcript
 
+1.2 Install Dependencies
 
-git clone <your-repo-url>
-cd backend-transcript
+    npm install
 
-
-
-Install dependencies
-
-
-npm install
-
-
-
-Configure environment variables
-
+1.3 Configure Environment Variables
 
 Create a .env file:
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/transcripts
-DB_POOL_SIZE=10
 
+    PORT=3000
+    MONGO_URI=mongodb://localhost:27017/transcripts
+    DB_POOL_SIZE=10
 
+1.4 Run the Server
 
-Run the server
+    npm run dev    # Using ts-node
+    # OR
+    npm start      # Using compiled JS
 
-
-npm run dev   # if using ts-node
-# or
-npm start     # compiled JS
-
+------------------------------------------------------------------------
 
 2. Database
-MongoDB collection: transcripts
-Mongoose model: Transcript
 
-const TranscriptSchema = new Schema<ITranscript>(
-  {
-    audioUrl: { type: String, required: true },
-    data: { type: String, required: true },
-    source: { type: String, required: true }
-  },
-  { timestamps: true }
-);
+Collection Name: transcripts
+Mongoose Model: Transcript
 
-// Index to optimize queries by createdAt
-TranscriptSchema.index({ createdAt: -1 });
+    const TranscriptSchema = new Schema<ITranscript>(
+      {
+        audioUrl: { type: String, required: true },
+        data: { type: String, required: true },
+        source: { type: String, required: true },
+      },
+      { timestamps: true }
+    );
 
-export default model<ITranscript>("Transcript", TranscriptSchema);
+    // Index to optimize queries by createdAt
+    TranscriptSchema.index({ createdAt: -1 });
 
+    export default model<ITranscript>("Transcript", TranscriptSchema);
 
-3. Endpoints
-3.1 POST /api/transcripts
-Description: Create a new transcript (dummy transcription).
-Request:
-POST /api/transcripts
-Content-Type: application/json
+------------------------------------------------------------------------
 
-{
-  "audioUrl": "https://example.com/sample.mp3"
-}
+3. API Endpoints
 
-Response:
-{
-    transcript: {
-  "_id": "64ab12345f6789abcdef0123",
-    audioUrl: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3"
-    createdAt: "2025-12-09T18:30:23.418Z"
-    data: "Transcript Text"
-    source: "mock"
-    updatedAt: "2025-12-09T18:30:23.418Z"
+3.1 Create Transcript
+
+POST /api/transcription
+Creates a new transcript using dummy transcription data.
+
+Request
+
+    POST /api/transcription
+    Content-Type: application/json
+
+    {
+      "audioUrl": "https://example.com/sample.mp3"
     }
-}
 
+Response
 
-
-3.2 POST /api/transcripts
-Description: Create a new transcript (dummy transcription).
-Request:
-POST /api/transcripts
-Content-Type: application/json
-
-{
-  "audioUrl": "https://example.com/sample.mp3"
-}
-
-
-Response:
-{
-    transcript: {
-  "_id": "64ab12345f6789abcdef0123",
-    audioUrl: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3"
-    createdAt: "2025-12-09T18:30:23.418Z"
-    data: "Transcript Text"
-    source: "mock"
-    updatedAt: "2025-12-09T18:30:23.418Z"
+    {
+      "transcript": {
+        "_id": "64ab12345f6789abcdef0123",
+        "audioUrl": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+        "data": "Transcript Text",
+        "source": "mock",
+        "createdAt": "2025-12-09T18:30:23.418Z",
+        "updatedAt": "2025-12-09T18:30:23.418Z"
+      }
     }
-}
 
-
-3.3 GET /api/transcripts
-Description: Fetch transcripts from last 30 days. Optional pagination via page and limit.
-Request examples:
-
-
-Last 30 days, no pagination:
-
-
-GET /api/transcripts
+------------------------------------------------------------------------
 
 
 
-Last 30 days, page 2, 50 per page:
+3.2 Create Transcript Azure
 
+POST /api/transcripts
+Creates a new transcript using dummy transcription data.
 
-GET /api/transcripts?page=2&limit=50
-Response: {
-    total: 20,
-    data: [{
+Request
 
-  "_id": "64ab12345f6789abcdef0123",
-    audioUrl: "https://samplelib.com/lib/preview/mp3/sample-3s.mp3"
-    createdAt: "2025-12-09T18:30:23.418Z"
-    data: "Transcript Text"
-    source: "mock"
-    updatedAt: "2025-12-09T18:30:23.418Z"
+    POST /api/azure-transcription
+    Content-Type: application/json
 
-    }]
-}
+    {
+      "audioUrl": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3"
+    }
 
+Response
 
+    {
+      "transcript": {
+        "_id": "64ab12345f6789abcdef0123",
+        "audioUrl": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+        "data": "Transcript Text",
+        "source": "mock",
+        "createdAt": "2025-12-09T18:30:23.418Z",
+        "updatedAt": "2025-12-09T18:30:23.418Z"
+      }
+    }
 
-1. Dummy Transcription
+------------------------------------------------------------------------
 
+3.2 Fetch Transcripts (Last 30 Days)
+
+Without Pagination
+
+    GET /api/transcription
+
+With Pagination
+
+    GET /api/transcription?page=2&limit=50
+
+Response
+
+    {
+      "total": 20,
+      "data": [
+        {
+          "_id": "64ab12345f6789abcdef0123",
+          "audioUrl": "https://samplelib.com/lib/preview/mp3/sample-3s.mp3",
+          "data": "Transcript Text",
+          "source": "mock",
+          "createdAt": "2025-12-09T18:30:23.418Z",
+          "updatedAt": "2025-12-09T18:30:23.418Z"
+        }
+      ]
+    }
+
+------------------------------------------------------------------------
+
+4. Dummy Transcription Logic
 
 For every POST request, the server returns a dummy transcription:
 
+    This is a dummy transcription for audio: <audioUrl>
 
-"This is a dummy transcription for audio: <audioUrl>"
+✅ No real audio processing
+✅ Fully free & fast
 
-
-
-No real audio processing is required. Fully free and fast.
-
-
+------------------------------------------------------------------------
 
 5. Database Indexing
 
+    TranscriptSchema.index({ createdAt: -1 });
 
-Index on createdAt improves performance when fetching recent records:
+Improves performance when fetching recent transcripts.
 
+------------------------------------------------------------------------
 
-TranscriptSchema.index({ createdAt: -1 });
+6. Tech Stack
 
+-   Node.js
+-   Express.js
+-   MongoDB
+-   Mongoose
+-   TypeScript
+
+------------------------------------------------------------------------
+
+7. FrontEnd Directory
+
+- /frontend 
+Build on next version 16 js node version 20
+-npm install 
+- npm run dev 
+- for web socket you can change url to /ws
+
+✅ Ready for integration with real speech-to-text services in the
+future.
